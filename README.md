@@ -1,5 +1,5 @@
 # 🍫 Choc
 
-A java class viewer written in typescript.
+A java class file deserializer written in typescript.
 
 

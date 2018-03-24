@@ -5,7 +5,7 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "target": "es2017",
+    "target": "esnext",
     "module": "commonjs",
     "declaration": true
   }
