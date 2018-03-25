@@ -1,3 +1,5 @@
+import { ConstantPool } from "./constant-pool";
+
 export enum AccessFlag {
   PUBLIC = 0x0001,
   FINAL = 0x0010,
@@ -10,24 +12,26 @@ export enum AccessFlag {
   MODULE = 0x8000
 }
 
-export enum ConstantType {
-  Unusable = -1,
-  Class = 7,
-  Fieldref = 9,
-  Methodref = 10,
-  InterfaceMethodref = 11,
-  String = 8,
-  Integer = 3,
-  Float = 4,
-  Long = 5,
-  Double = 6,
-  NameAndType = 12,
-  Utf8 = 1,
-  MethodHandle = 15,
-  MethodType = 16,
-  InvokeDynamic = 18,
-  Module = 19,
-  Package = 20
+export class AttributeInfo {
+  nameIndex: number;
+  length: number;
+  info: Buffer;
+}
+
+export class FieldInfo {
+  accessFlags: number;
+  nameIndex: number;
+  descriptorIndex: number;
+  attributesCount: number;
+  attributes: AttributeInfo[];
+}
+
+export class MethodInfo {
+  accessFlags: number;
+  nameIndex: number;
+  descriptorIndex: number;
+  attributesCount: number;
+  attributes: AttributeInfo[];
 }
 
 export class ClassFile {
@@ -35,5 +39,16 @@ export class ClassFile {
   minorVersion: number;
   majorVersion: number;
   constantPoolCount: number;
+  constantPool: ConstantPool;
   accessFlag: number;
+  thisClass: number;
+  superClass: number;
+  interfacesCount: number;
+  interfaces: number[];
+  fieldsCount: number;
+  fields: FieldInfo[];
+  methodsCount: number;
+  methods: MethodInfo[];
+  attributesCount: number;
+  attributes: AttributeInfo[];
 }
