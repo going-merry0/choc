@@ -365,7 +365,9 @@ export class DoubleInfo extends ConstantInfo {
       : bits.and(bigInt(0xfffffffffffff)).or(bigInt(0x10000000000000));
     const bs = new BigNumber(s.toString());
     // pow operation of BigNumber lose the precision?
-    return bs.multipliedBy(m.toString()).multipliedBy(Math.pow(2, e.toJSNumber() - 1075).toString());
+    return bs
+      .multipliedBy(m.toString())
+      .multipliedBy(Math.pow(2, e.toJSNumber() - 1075).toString());
   }
 }
 
@@ -397,22 +399,22 @@ export class Utf8Info extends ConstantInfo {
       const byt = this.bytes.readUInt8(i);
       if (byt >= 0x01 && byt <= 0x7f) {
         str += String.fromCharCode(byt);
-      } else if (byt === 0x0 || (byt >= 0x80 && byt <= 0x7ff)) {
-        const x = this.bytes.readUInt8(i);
+      } else if (byt === 0x0 || byt >>> 5 == 0x6) {
+        const x = byt;
         const y = this.bytes.readUInt8(++i);
-        str += String.fromCharCode(((x & 0x1f) << 6) + (y & 0x3f));
-      } else if (byt >= 0x800 && byt <= 0xffff) {
-        const x = this.bytes.readUInt8(i);
+        str += String.fromCharCode(((x & 0x1f) << 6) | (y & 0x3f));
+      } else if (byt >>> 4 == 0xe) {
+        const x = byt;
         const y = this.bytes.readUInt8(++i);
         const z = this.bytes.readUInt8(++i);
-        str += String.fromCharCode(((x & 0x1f) << 6) + (y & 0x3f));
+        str += String.fromCharCode(((x & 0xf) << 12) | ((y & 0x3f) << 6) | (z & 0x3f));
       } else {
-        const u = this.bytes.readUInt8(i);
-        const v = this.bytes.readUInt8(++i);
-        const w = this.bytes.readUInt8(++i);
+        const u = byt;
+        const v = this.bytes.readUInt8(++i) & 0xf;
+        const w = this.bytes.readUInt8(++i) & 0x3f;
         const x = this.bytes.readUInt8(++i);
-        const y = this.bytes.readUInt8(++i);
-        const z = this.bytes.readUInt8(++i);
+        const y = this.bytes.readUInt8(++i) & 0xf;
+        const z = this.bytes.readUInt8(++i) & 0x3f;
         str += String.fromCodePoint(
           0x10000 + ((v & 0x0f) << 16) + ((w & 0x3f) << 10) + ((y & 0x0f) << 6) + (z & 0x3f)
         );
