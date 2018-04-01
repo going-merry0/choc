@@ -211,7 +211,7 @@ export class ClassInfo extends ConstantInfo {
   }
 
   get name() {
-    return (this.pool.getEntry(this.nameIndex) as Utf8Info).string;
+    return this.pool.getEntry<Utf8Info>(this.nameIndex).string;
   }
 }
 
@@ -225,11 +225,11 @@ export class FieldrefInfo extends ConstantInfo {
   }
 
   get clazz() {
-    return this.pool.getEntry(this.classIndex) as ClassInfo;
+    return this.pool.getEntry<ClassInfo>(this.classIndex);
   }
 
   get nameAndType() {
-    return this.pool.getEntry(this.nameAndTypeIndex) as NameAndTypeInfo;
+    return this.pool.getEntry<NameAndTypeInfo>(this.nameAndTypeIndex);
   }
 }
 
@@ -243,11 +243,11 @@ export class MethodrefInfo extends ConstantInfo {
   }
 
   get clazz() {
-    return this.pool.getEntry(this.classIndex) as ClassInfo;
+    return this.pool.getEntry<ClassInfo>(this.classIndex);
   }
 
   get nameAndType() {
-    return this.pool.getEntry(this.nameAndTypeIndex) as NameAndTypeInfo;
+    return this.pool.getEntry<NameAndTypeInfo>(this.nameAndTypeIndex);
   }
 }
 
@@ -261,11 +261,11 @@ export class InterfaceMethodrefInfo extends ConstantInfo {
   }
 
   get clazz() {
-    return this.pool.getEntry(this.classIndex) as ClassInfo;
+    return this.pool.getEntry<ClassInfo>(this.classIndex);
   }
 
   get nameAndType() {
-    return this.pool.getEntry(this.nameAndTypeIndex) as NameAndTypeInfo;
+    return this.pool.getEntry<NameAndTypeInfo>(this.nameAndTypeIndex);
   }
 }
 
@@ -379,6 +379,14 @@ export class NameAndTypeInfo extends ConstantInfo {
     this.nameIndex = nameIndex;
     this.descriptorIndex = descriptorIndex;
   }
+
+  get name() {
+    return this.pool.getEntry<Utf8Info>(this.nameIndex).string;
+  }
+
+  get descriptor() {
+    return this.pool.getEntry<Utf8Info>(this.nameIndex).string;
+  }
 }
 
 export class Utf8Info extends ConstantInfo {
@@ -441,6 +449,25 @@ export class MethodHandleInfo extends ConstantInfo {
     this.referenceKind = referenceKind;
     this.referenceIndex = referenceIndex;
   }
+
+  get reference() {
+    switch (this.referenceKind) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+        return this.pool.getEntry<FieldrefInfo>(this.referenceIndex);
+      case 5:
+      case 8:
+        return this.pool.getEntry<MethodrefInfo>(this.referenceIndex);
+      case 6:
+      case 7:
+        return this.pool.getEntry<MethodrefInfo | InterfaceMethodrefInfo>(this.referenceIndex);
+      case 9:
+        return this.pool.getEntry<InterfaceMethodrefInfo>(this.referenceIndex);
+    }
+    return new UnusableConstantInfo();
+  }
 }
 
 export class MethodTypeInfo extends ConstantInfo {
@@ -448,6 +475,10 @@ export class MethodTypeInfo extends ConstantInfo {
   constructor(pool: ConstantPool, descriptorIndex: number) {
     super(ConstantType.MethodType, pool);
     this.descriptorIndex = descriptorIndex;
+  }
+
+  get descriptor() {
+    return this.pool.getEntry<Utf8Info>(this.descriptorIndex).string;
   }
 }
 
@@ -459,6 +490,10 @@ export class InvokeDynamicInfo extends ConstantInfo {
     this.bootstrapMethodAttrIndex = bootstrapMethodAttrIndex;
     this.nameAndTypeIndex = nameAndTypeIndex;
   }
+
+  get nameAndType() {
+    return this.pool.getEntry<NameAndTypeInfo>(this.nameAndTypeIndex);
+  }
 }
 
 export class ModuleInfo extends ConstantInfo {
@@ -467,6 +502,10 @@ export class ModuleInfo extends ConstantInfo {
     super(ConstantType.Module, pool);
     this.nameIndex = nameIndex;
   }
+
+  get name() {
+    return this.pool.getEntry<Utf8Info>(this.nameIndex).string;
+  }
 }
 
 export class PackageInfo extends ConstantInfo {
@@ -474,5 +513,9 @@ export class PackageInfo extends ConstantInfo {
   constructor(pool: ConstantPool, nameIndex: number) {
     super(ConstantType.Package, pool);
     this.nameIndex = nameIndex;
+  }
+
+  get name() {
+    return this.pool.getEntry<Utf8Info>(this.nameIndex).string;
   }
 }
