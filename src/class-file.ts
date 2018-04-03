@@ -279,7 +279,7 @@ export class FieldInfo {
 
   get signature() {
     const attrs = this.attributes.filter(attr => attr.isSignature);
-    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr);
+    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr).signature;
     return null;
   }
 }
@@ -305,7 +305,7 @@ export class MethodInfo {
 
   get signature() {
     const attrs = this.attributes.filter(attr => attr.isSignature);
-    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr);
+    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr).signature;
     return null;
   }
 

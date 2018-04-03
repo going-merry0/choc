@@ -12,4 +12,4 @@ A java class file deserializer written in typescript.
 
 if all above goes well, open debug console you'll see:
 
-<img src="http://og9g58alt.bkt.clouddn.com/20180403185049.png" width="500" />
+<img src="http://og9g58alt.bkt.clouddn.com/20180403185941.png" width="500" />
