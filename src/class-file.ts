@@ -282,7 +282,7 @@ export class FieldInfo {
 
   get signature() {
     const attrs = this.attributes.filter(attr => attr.isSignature);
-    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr).signature;
+    if (attrs.length === 1) return attrs[0].to(SignatureAttr).signature;
     return null;
   }
 }
@@ -308,13 +308,13 @@ export class MethodInfo {
 
   get signature() {
     const attrs = this.attributes.filter(attr => attr.isSignature);
-    if (attrs.length === 1) return attrs[0].to<SignatureAttr>(SignatureAttr).signature;
+    if (attrs.length === 1) return attrs[0].to(SignatureAttr).signature;
     return null;
   }
 
   get formalParams() {
     const attrs = this.attributes.filter(attr => attr.isMethodParameters);
-    if (attrs.length === 1) return attrs[0].to<MethodParameters>(MethodParameters).formalParams;
+    if (attrs.length === 1) return attrs[0].to(MethodParameters).formalParams;
     return [];
   }
 }
