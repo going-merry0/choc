@@ -24,9 +24,9 @@ export class ConstantPool {
     }
   }
 
-  getEntry<T>(index: number): T {
-    if (this._table.has(index)) return this._table.get(index)! as any;
-    return new UnusableConstantInfo() as any;
+  getEntry<T extends ConstantInfo>(index: number): T {
+    if (this._table.has(index)) return this._table.get(index)! as T;
+    return new UnusableConstantInfo() as T;
   }
 
   private readInfo(tag: number) {
@@ -181,6 +181,7 @@ export enum ConstantType {
 export class ConstantInfo {
   readonly tag: number;
   readonly pool: ConstantPool;
+
   constructor(tag: number, pool: ConstantPool) {
     this.tag = tag;
     this.pool = pool;
@@ -205,6 +206,7 @@ export class UnusableConstantInfo extends ConstantInfo {
 
 export class ClassInfo extends ConstantInfo {
   readonly nameIndex: number;
+
   constructor(pool: ConstantPool, nameIndex: number) {
     super(ConstantType.Class, pool);
     this.nameIndex = nameIndex;
@@ -218,6 +220,7 @@ export class ClassInfo extends ConstantInfo {
 export class FieldrefInfo extends ConstantInfo {
   readonly classIndex: number;
   readonly nameAndTypeIndex: number;
+
   constructor(pool: ConstantPool, classIndex: number, nameAndTypeIndex: number) {
     super(ConstantType.Fieldref, pool);
     this.classIndex = classIndex;
@@ -236,6 +239,7 @@ export class FieldrefInfo extends ConstantInfo {
 export class MethodrefInfo extends ConstantInfo {
   readonly classIndex: number;
   readonly nameAndTypeIndex: number;
+
   constructor(pool: ConstantPool, classIndex: number, nameAndTypeIndex: number) {
     super(ConstantType.Methodref, pool);
     this.classIndex = classIndex;
@@ -254,6 +258,7 @@ export class MethodrefInfo extends ConstantInfo {
 export class InterfaceMethodrefInfo extends ConstantInfo {
   readonly classIndex: number;
   readonly nameAndTypeIndex: number;
+
   constructor(pool: ConstantPool, classIndex: number, nameAndTypeIndex: number) {
     super(ConstantType.InterfaceMethodref, pool);
     this.classIndex = classIndex;
@@ -271,6 +276,7 @@ export class InterfaceMethodrefInfo extends ConstantInfo {
 
 export class StringInfo extends ConstantInfo {
   readonly stringIndex: number;
+
   constructor(pool: ConstantPool, stringIndex: number) {
     super(ConstantType.String, pool);
     this.stringIndex = stringIndex;
@@ -283,6 +289,7 @@ export class StringInfo extends ConstantInfo {
 
 export class IntegerInfo extends ConstantInfo {
   readonly bytes: Buffer;
+
   constructor(pool: ConstantPool, bytes: Buffer) {
     super(ConstantType.Integer, pool);
     this.bytes = bytes;
@@ -295,6 +302,7 @@ export class IntegerInfo extends ConstantInfo {
 
 export class FloatInfo extends ConstantInfo {
   readonly bytes: Buffer;
+
   constructor(pool: ConstantPool, bytes: Buffer) {
     super(ConstantType.Float, pool);
     this.bytes = bytes;
@@ -318,6 +326,7 @@ export class FloatInfo extends ConstantInfo {
 export class LongInfo extends ConstantInfo {
   readonly highBytes: Buffer;
   readonly lowBytes: Buffer;
+
   constructor(pool: ConstantPool, highBytes: Buffer, lowBytes: Buffer) {
     super(ConstantType.Long, pool);
     this.highBytes = highBytes;
@@ -339,6 +348,7 @@ export class LongInfo extends ConstantInfo {
 export class DoubleInfo extends ConstantInfo {
   readonly highBytes: Buffer;
   readonly lowBytes: Buffer;
+
   constructor(pool: ConstantPool, highBytes: Buffer, lowBytes: Buffer) {
     super(ConstantType.Double, pool);
     this.highBytes = highBytes;
@@ -374,6 +384,7 @@ export class DoubleInfo extends ConstantInfo {
 export class NameAndTypeInfo extends ConstantInfo {
   readonly nameIndex: number;
   readonly descriptorIndex: number;
+
   constructor(pool: ConstantPool, nameIndex: number, descriptorIndex: number) {
     super(ConstantType.NameAndType, pool);
     this.nameIndex = nameIndex;
@@ -444,6 +455,7 @@ export class Utf8Info extends ConstantInfo {
 export class MethodHandleInfo extends ConstantInfo {
   readonly referenceKind: number;
   readonly referenceIndex: number;
+
   constructor(pool: ConstantPool, referenceKind: number, referenceIndex: number) {
     super(ConstantType.MethodHandle, pool);
     this.referenceKind = referenceKind;
@@ -472,6 +484,7 @@ export class MethodHandleInfo extends ConstantInfo {
 
 export class MethodTypeInfo extends ConstantInfo {
   readonly descriptorIndex: number;
+
   constructor(pool: ConstantPool, descriptorIndex: number) {
     super(ConstantType.MethodType, pool);
     this.descriptorIndex = descriptorIndex;
@@ -485,6 +498,7 @@ export class MethodTypeInfo extends ConstantInfo {
 export class InvokeDynamicInfo extends ConstantInfo {
   readonly bootstrapMethodAttrIndex: number;
   readonly nameAndTypeIndex: number;
+
   constructor(pool: ConstantPool, bootstrapMethodAttrIndex: number, nameAndTypeIndex: number) {
     super(ConstantType.InvokeDynamic, pool);
     this.bootstrapMethodAttrIndex = bootstrapMethodAttrIndex;
@@ -498,6 +512,7 @@ export class InvokeDynamicInfo extends ConstantInfo {
 
 export class ModuleInfo extends ConstantInfo {
   readonly nameIndex: number;
+
   constructor(pool: ConstantPool, nameIndex: number) {
     super(ConstantType.Module, pool);
     this.nameIndex = nameIndex;
@@ -510,6 +525,7 @@ export class ModuleInfo extends ConstantInfo {
 
 export class PackageInfo extends ConstantInfo {
   readonly nameIndex: number;
+
   constructor(pool: ConstantPool, nameIndex: number) {
     super(ConstantType.Package, pool);
     this.nameIndex = nameIndex;

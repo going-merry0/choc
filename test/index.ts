@@ -1,7 +1,6 @@
-import * as assert from "assert";
 import * as path from "path";
-import { Deserializer } from "../src";
-import { LongInfo, DoubleInfo, Utf8Info } from "../src/constant-pool";
+import { Deserializer, ConstantValueAttr } from "../src";
+import { LongInfo } from "../src/constant-pool";
 
 (async () => {
   const dec = await Deserializer.fromFile(path.resolve(__dirname, "case1/ClassA.class"));
@@ -14,6 +13,7 @@ import { LongInfo, DoubleInfo, Utf8Info } from "../src/constant-pool";
 
   console.log("\nfields(name|descriptor|signature):");
   cf.fields.forEach(f => console.log(`  ${f.name}  ${f.descriptor}  ${f.signature}`));
+  console.log(cf.fields[0].attributes[0].to<ConstantValueAttr>(ConstantValueAttr).getValue<LongInfo>().number.toString());
 
   console.log("\nmethods(name|descriptor|signature|formalParams):");
   cf.methods.forEach(m =>

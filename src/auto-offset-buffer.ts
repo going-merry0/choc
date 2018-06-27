@@ -32,7 +32,7 @@ export class AutoOffsetBuffer {
   forward(cnt: number) {
     // does not use a Buffer.slice here
     // since we need a boundary check
-    const r = new Buffer(cnt);
+    const r = Buffer.allocUnsafe(cnt);
     for (let i = 0; i < cnt; ++i) {
       r.writeUInt8(this.readUInt8(), i);
     }

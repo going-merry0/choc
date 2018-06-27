@@ -1,6 +1,5 @@
-import { ConstantPool, ClassInfo } from "./constant-pool";
-import { Utf8Info } from "../dist/src/constant-pool";
-import * as assert from "assert";
+import { ConstantPool, ClassInfo, ConstantInfo } from "./constant-pool";
+import { Utf8Info } from "./constant-pool";
 import { AutoOffsetBuffer } from "./auto-offset-buffer";
 
 export enum ClassAccessFlag {
@@ -129,6 +128,10 @@ export class ConstantValueAttr extends AttributeInfo {
 
   satisfy() {
     this.constantValueIndex = this.info.readUInt16BE(0);
+  }
+
+  getValue<T extends ConstantInfo>() {
+    return this.constantPool.getEntry<T>(this.constantValueIndex);
   }
 }
 
