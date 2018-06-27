@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import fs from "fs";
 import { promisify } from "util";
 import { ClassFile, AttributeInfo, FieldInfo, MethodInfo } from "./class-file";
 import { AutoOffsetBuffer } from "./auto-offset-buffer";

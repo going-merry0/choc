@@ -1,5 +1,5 @@
 import { AutoOffsetBuffer } from "./auto-offset-buffer";
-import * as bigInt from "big-integer";
+import bigInt from "big-integer";
 import { BigNumber } from "bignumber.js";
 
 export class ConstantPool {

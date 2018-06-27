@@ -1,12 +1,12 @@
-import * as del from "del";
-import * as gulp from "gulp";
-import * as gutil from "gulp-util";
-import * as jsonfile from "jsonfile";
-import * as sourcemaps from "gulp-sourcemaps";
-import * as ts from "gulp-typescript";
+import del from "del";
+import gulp from "gulp";
+import jsonfile from "jsonfile";
+import sourcemaps from "gulp-sourcemaps";
+import ts from "gulp-typescript";
+import PluginError from "plugin-error";
 
-const tslint = require("gulp-tslint");
-const prettier = require("gulp-prettier-plugin");
+import tslint from "gulp-tslint";
+import prettier from "gulp-prettier-plugin";
 
 const src = ["./src/**/*.ts", "./test/**/*.ts"];
 const tsProject = ts.createProject("tsconfig.json");
@@ -27,15 +27,18 @@ gulp.task("copyFiles", () => {
 gulp.task("prettier", () => {
   const cfg = jsonfile.readFileSync("./.prettierrc", { throws: false });
   if (cfg === null) {
-    throw new gutil.PluginError({
+    throw new PluginError({
       plugin: "prettier",
       message: "missing or deformed .prettierrc"
     });
   }
-  return gulp
-    .src(src)
-    .pipe(prettier(cfg, { filter: true }) as any)
-    .pipe(gulp.dest((file: any) => file.base));
+  return (
+    gulp
+      .src(src)
+      // @ts-ignore
+      .pipe(prettier(cfg, { filter: true }))
+      .pipe(gulp.dest((file: any) => file.base))
+  );
 });
 
 gulp.task("tslint", () =>
